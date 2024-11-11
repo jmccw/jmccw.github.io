@@ -80,21 +80,23 @@
 <body>
     <!-- Original Box -->
     <div class="container" id="originalBox">
-        <h1>Welcome!</h1>
-        <p>Press the button below to reveal something new.</p>
-        <button class="reveal-button" onclick="switchToNewBox()">Reveal</button>
+        <h1>How Far Am I From Tyndall?</h1>
+        <p>Aren't you curious?</p>
+        <button class="reveal-button" onclick="switchToNewBox()">Find out now!</button>
     </div>
 
     <!-- New Box (Initially Hidden) -->
     <div class="container hidden" id="newBox">
-        <h1>Surprise!</h1>
-        <p>This is the new content that appeared after the button press.</p>
+		<p>You are...</p>
+        <h1><span id="distance"></span> meters</h1>
+        <p>from Tyndall National Institute.</p>
         <button class="new-button" onclick="switchToOriginalBox()">Check again?</button>
     </div>
 
     <script>
         // Function to switch to the new box
         function switchToNewBox() {
+			revealText();
             const originalBox = document.getElementById("originalBox");
             const newBox = document.getElementById("newBox");
 
@@ -120,6 +122,42 @@
                 originalBox.classList.remove("hidden");
             }, 1000); // Delay to allow fade-out animation
         }
+        
+        
+		function hav (x) {
+			return Math.sin(x/2)*Math.sin(x/2);
+		}
+		  
+		function haversine_distance (lat1,lat2,lon1,lon2)
+		{
+		  x = hav(0.0174533*(lat2-lat1)) + Math.cos(0.0174533*lat1)*Math.cos(0.0174533*lat2)*hav(0.0174533*(lon2-lon1));
+		  d = 2*6.3781e+6*Math.asin(Math.sqrt(x))
+		  return d;
+		}
+		
+		function revealText() {
+			if (navigator.geolocation) {
+				navigator.geolocation.getCurrentPosition(
+				  function (position) {
+					const latitude = position.coords.latitude;
+					const longitude = position.coords.longitude;
+					const distToTyndall = haversine_distance(51.898046,latitude,-8.483321,longitude);
+
+					// Update the text
+					document.getElementById('distance').textContent = distToTyndall;
+				  },
+				  function (error) {
+					alert('Error obtaining location: ' + error.message);
+				  }
+				);
+			  } else {
+				alert("Geolocation is not supported by this browser.");
+			  }
+			  
+		//~ const text = document.getElementById("hiddenText");
+		//~ text.classList.add("fade-in");
+			
+		}
     </script>
 </body>
 </html>
