@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aesthetic Box Switch</title>
+    <style>
+        /* Basic Reset */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+        }
+
+        /* Centering Content */
+        body, html {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f2f2f2;
+            color: #333;
+            overflow: hidden;
+        }
+
+        /* Container Styling */
+        .container {
+            text-align: center;
+            padding: 20px;
+            max-width: 400px;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            opacity: 1;
+            transition: opacity 1s ease, transform 1s ease;
+        }
+
+        /* Hidden Styling */
+        .hidden {
+            opacity: 0;
+            transform: scale(0.9);
+            pointer-events: none; /* Ignore interactions when hidden */
+        }
+
+        /* Button Styling */
+        .reveal-button, .new-button {
+            padding: 10px 20px;
+            margin-top: 20px;
+            background-color: #4a90e2;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .reveal-button:hover, .new-button:hover {
+            background-color: #357abd;
+        }
+
+        /* Text Styling */
+        .hidden-text {
+            margin-top: 20px;
+            font-size: 18px;
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+
+        .fade-in {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <!-- Original Box -->
+    <div class="container" id="originalBox">
+        <h1>Welcome!</h1>
+        <p>Press the button below to reveal something new.</p>
+        <button class="reveal-button" onclick="switchToNewBox()">Reveal</button>
+    </div>
+
+    <!-- New Box (Initially Hidden) -->
+    <div class="container hidden" id="newBox">
+        <h1>Surprise!</h1>
+        <p>This is the new content that appeared after the button press.</p>
+        <button class="new-button" onclick="switchToOriginalBox()">Check again?</button>
+    </div>
+
+    <script>
+        // Function to switch to the new box
+        function switchToNewBox() {
+            const originalBox = document.getElementById("originalBox");
+            const newBox = document.getElementById("newBox");
+
+            // Fade out the original box
+            originalBox.classList.add("hidden");
+
+            // After a short delay, fade in the new box
+            setTimeout(() => {
+                newBox.classList.remove("hidden");
+            }, 1000); // Delay to allow fade-out animation
+        }
+
+        // Function to switch back to the original box
+        function switchToOriginalBox() {
+            const originalBox = document.getElementById("originalBox");
+            const newBox = document.getElementById("newBox");
+
+            // Fade out the new box
+            newBox.classList.add("hidden");
+
+            // After a short delay, fade in the original box
+            setTimeout(() => {
+                originalBox.classList.remove("hidden");
+            }, 1000); // Delay to allow fade-out animation
+        }
+    </script>
+</body>
+</html>

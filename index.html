@@ -98,29 +98,6 @@
   
 
   <script>
-	  
-    //~ function getLocation() {
-      //~ if (navigator.geolocation) {
-        //~ navigator.geolocation.getCurrentPosition(
-          //~ function (position) {
-            //~ const latitude = position.coords.latitude;
-            //~ const longitude = position.coords.longitude;
-
-            //~ // Display the latitude and longitude in the UI
-            //~ document.getElementById('latitude').textContent = latitude;
-            //~ document.getElementById('longitude').textContent = longitude;
-            //~ document.getElementById('distance').textContent = haversine_distance(51.898046,latitude,-8.483321,longitude);
-
-            //~ // Send data to the Google Sheets endpoint
-          //~ },
-          //~ function (error) {
-            //~ alert('Error obtaining location: ' + error.message);
-          //~ }
-        //~ );
-      //~ } else {
-        //~ alert("Geolocation is not supported by this browser.");
-      //~ }
-    //~ }
 
     function hav (x) {
         return Math.sin(x/2)*Math.sin(x/2);
