@@ -3,11 +3,10 @@
 	
 	
 <head>
-  <title>Geolocation App</title>
+    <title>How Far Am I From Tyndall?</title>
   
       <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>How Far Am I From Tyndall?</title>
     <style>
         /* Basic Reset */
         * {
@@ -100,28 +99,28 @@
 
   <script>
 	  
-    function getLocation() {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          function (position) {
-            const latitude = position.coords.latitude;
-            const longitude = position.coords.longitude;
+    //~ function getLocation() {
+      //~ if (navigator.geolocation) {
+        //~ navigator.geolocation.getCurrentPosition(
+          //~ function (position) {
+            //~ const latitude = position.coords.latitude;
+            //~ const longitude = position.coords.longitude;
 
-            // Display the latitude and longitude in the UI
-            document.getElementById('latitude').textContent = latitude;
-            document.getElementById('longitude').textContent = longitude;
-            document.getElementById('distance').textContent = haversine_distance(51.898046,latitude,-8.483321,longitude);
+            //~ // Display the latitude and longitude in the UI
+            //~ document.getElementById('latitude').textContent = latitude;
+            //~ document.getElementById('longitude').textContent = longitude;
+            //~ document.getElementById('distance').textContent = haversine_distance(51.898046,latitude,-8.483321,longitude);
 
-            // Send data to the Google Sheets endpoint
-          },
-          function (error) {
-            alert('Error obtaining location: ' + error.message);
-          }
-        );
-      } else {
-        alert("Geolocation is not supported by this browser.");
-      }
-    }
+            //~ // Send data to the Google Sheets endpoint
+          //~ },
+          //~ function (error) {
+            //~ alert('Error obtaining location: ' + error.message);
+          //~ }
+        //~ );
+      //~ } else {
+        //~ alert("Geolocation is not supported by this browser.");
+      //~ }
+    //~ }
 
     function hav (x) {
         return Math.sin(x/2)*Math.sin(x/2);
@@ -140,9 +139,10 @@
 			  function (position) {
 				const latitude = position.coords.latitude;
 				const longitude = position.coords.longitude;
+				const distToTyndall = haversine_distance(51.898046,latitude,-8.483321,longitude);
 
 				// Update the text
-				document.getElementById('distance').textContent = haversine_distance(51.898046,latitude,-8.483321,longitude);
+				document.getElementById('distance').textContent = distToTyndall;
 			  },
 			  function (error) {
 				alert('Error obtaining location: ' + error.message);
