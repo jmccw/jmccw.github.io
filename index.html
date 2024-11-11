@@ -1,12 +1,9 @@
 <!DOCTYPE html>
-<html>
-	
-	
+<html lang="en">
 <head>
-    <title>How Far Am I From Tyndall?</title>
-  
-      <meta charset="UTF-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aesthetic Box Switch</title>
     <style>
         /* Basic Reset */
         * {
@@ -16,29 +13,42 @@
             font-family: 'Arial', sans-serif;
         }
 
-        /* Centering Content */
+        /* Centering Body */
         body, html {
-            display: flex;
-            align-items: center;
-            justify-content: center;
             height: 100vh;
             background-color: #f2f2f2;
             color: #333;
             overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         /* Container Styling */
         .container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             text-align: center;
             padding: 20px;
-            max-width: 400px;
+            width: 300px;
             background: #ffffff;
             border-radius: 12px;
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            opacity: 1;
+            transition: opacity 1s ease, transform 1s ease;
+        }
+
+        /* Hidden Styling */
+        .hidden {
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.9);
+            pointer-events: none; /* Ignore interactions when hidden */
         }
 
         /* Button Styling */
-        .reveal-button {
+        .reveal-button, .new-button {
             padding: 10px 20px;
             margin-top: 20px;
             background-color: #4a90e2;
@@ -50,7 +60,7 @@
             transition: background-color 0.3s ease;
         }
 
-        .reveal-button:hover {
+        .reveal-button:hover, .new-button:hover {
             background-color: #357abd;
         }
 
@@ -62,78 +72,92 @@
             transition: opacity 1s ease;
         }
 
-        /* Fade-in Animation */
         .fade-in {
             opacity: 1;
         }
     </style>
-  
 </head>
-
 <body>
-<!--
-  <h2>Geolocation Finder</h2>
--->
-<!--
-  <button onclick="getLocation()">Get Location and Send to Google Sheets</button>
--->
-<!--
-  <div id="output">
-    <p><strong>Latitude:</strong> <span id="latitude">N/A</span></p>
-    <p><strong>Longitude:</strong> <span id="longitude">N/A</span></p>
-    <p><strong>Distance to Tyndall:</strong> <span id="distance2">N/A</span></p>
-  </div>
--->
-  
-	<div class="container">
-		<h1>How Far am I From Tyndall?</h1>
-		<p>Aren't you curious?</p>
-		<button class="reveal-button" onclick="revealText()">Find out now!</button>
-		<p class="hidden-text" id="hiddenText"> You are <span id="distance"></span> meters from Tyndall.</p>
-	</div>
-  
-  
-  
-  
-  
+    <!-- Original Box -->
+    <div class="container" id="originalBox">
+        <h1>How Far Am I From Tyndall?</h1>
+        <p>Aren't you curious?</p>
+        <button class="reveal-button" onclick="switchToNewBox()">Find out now!</button>
+    </div>
 
-  <script>
+    <!-- New Box (Initially Hidden) -->
+    <div class="container hidden" id="newBox">
+		<p>You are...</p>
+        <h1><span id="distance"></span> meters</h1>
+        <p>from Tyndall National Institute.</p>
+        <button class="new-button" onclick="switchToOriginalBox()">Check again?</button>
+    </div>
 
-    function hav (x) {
-        return Math.sin(x/2)*Math.sin(x/2);
-    }
-      
-    function haversine_distance (lat1,lat2,lon1,lon2)
-    {
-      x = hav(0.0174533*(lat2-lat1)) + Math.cos(0.0174533*lat1)*Math.cos(0.0174533*lat2)*hav(0.0174533*(lon2-lon1));
-      d = 2*6.3781e+6*Math.asin(Math.sqrt(x))
-      return d;
-    }
-    
-    function revealText() {
-		if (navigator.geolocation) {
-			navigator.geolocation.getCurrentPosition(
-			  function (position) {
-				const latitude = position.coords.latitude;
-				const longitude = position.coords.longitude;
-				const distToTyndall = haversine_distance(51.898046,latitude,-8.483321,longitude);
+    <script>
+        // Function to switch to the new box
+        function switchToNewBox() {
+			revealText();
+            const originalBox = document.getElementById("originalBox");
+            const newBox = document.getElementById("newBox");
 
-				// Update the text
-				document.getElementById('distance').textContent = distToTyndall;
-			  },
-			  function (error) {
-				alert('Error obtaining location: ' + error.message);
-			  }
-			);
-		  } else {
-			alert("Geolocation is not supported by this browser.");
-		  }
+            // Fade out the original box
+            originalBox.classList.add("hidden");
+
+            // After a short delay, fade in the new box
+            setTimeout(() => {
+                newBox.classList.remove("hidden");
+            }, 1000); // Delay to allow fade-out animation
+        }
+
+        // Function to switch back to the original box
+        function switchToOriginalBox() {
+            const originalBox = document.getElementById("originalBox");
+            const newBox = document.getElementById("newBox");
+
+            // Fade out the new box
+            newBox.classList.add("hidden");
+
+            // After a short delay, fade in the original box
+            setTimeout(() => {
+                originalBox.classList.remove("hidden");
+            }, 1000); // Delay to allow fade-out animation
+        }
+        
+        
+		function hav (x) {
+			return Math.sin(x/2)*Math.sin(x/2);
+		}
 		  
-	const text = document.getElementById("hiddenText");
-	text.classList.add("fade-in");
+		function haversine_distance (lat1,lat2,lon1,lon2)
+		{
+		  x = hav(0.0174533*(lat2-lat1)) + Math.cos(0.0174533*lat1)*Math.cos(0.0174533*lat2)*hav(0.0174533*(lon2-lon1));
+		  d = 2*6.3781e+6*Math.asin(Math.sqrt(x))
+		  return d;
+		}
 		
-	}
-	
-  </script>
+		function revealText() {
+			if (navigator.geolocation) {
+				navigator.geolocation.getCurrentPosition(
+				  function (position) {
+					const latitude = position.coords.latitude;
+					const longitude = position.coords.longitude;
+					const distToTyndall = haversine_distance(51.898046,latitude,-8.483321,longitude).toFixed(5);
+
+					// Update the text
+					document.getElementById('distance').textContent = distToTyndall;
+				  },
+				  function (error) {
+					alert('Error obtaining location: ' + error.message);
+				  }
+				);
+			  } else {
+				alert("Geolocation is not supported by this browser.");
+			  }
+			  
+		//~ const text = document.getElementById("hiddenText");
+		//~ text.classList.add("fade-in");
+			
+		}
+    </script>
 </body>
 </html>
