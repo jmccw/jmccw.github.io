@@ -1,83 +1,75 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>How Far Am I From Tyndall?</title>
-    <style>
-        /* Basic Reset */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Arial', sans-serif;
-        }
-
-        /* Centering Content */
-        body, html {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            background-color: #f2f2f2;
-            color: #333;
-            overflow: hidden;
-        }
-
-        /* Container Styling */
-        .container {
-            text-align: center;
-            padding: 20px;
-            max-width: 400px;
-            background: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Button Styling */
-        .reveal-button {
-            padding: 10px 20px;
-            margin-top: 20px;
-            background-color: #4a90e2;
-            color: white;
-            border: none;
-            border-radius: 25px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .reveal-button:hover {
-            background-color: #357abd;
-        }
-
-        /* Text Styling */
-        .hidden-text {
-            margin-top: 20px;
-            font-size: 18px;
-            opacity: 0;
-            transition: opacity 1s ease;
-        }
-
-        /* Fade-in Animation */
-        .fade-in {
-            opacity: 1;
-        }
-    </style>
+  <title>Geolocation App</title>
 </head>
 <body>
-    <div class="container">
-        <h1>How Far am I From Tyndall?</h1>
-        <p>Aren't you curious?</p>
-        <button class="reveal-button" onclick="revealText()">Find out now!</button>
-        <p class="hidden-text" id="hiddenText">You are {}m from Tyndall</p>
-    </div>
+  <h2>Geolocation Finder</h2>
+  <button onclick="getLocation()">Get Location and Send to Google Sheets</button>
+  <div id="output">
+    <p><strong>Latitude:</strong> <span id="latitude">N/A</span></p>
+    <p><strong>Longitude:</strong> <span id="longitude">N/A</span></p>
+    <p><strong>Distance to Tyndall::</strong> <span id="distance">N/A</span></p>
+  </div>
 
-    <script>
-        function revealText() {
-            const text = document.getElementById("hiddenText");
-            text.classList.add("fade-in");
+  <script>
+    function getLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          function (position) {
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+
+            // Display the latitude and longitude in the UI
+            document.getElementById('latitude').textContent = latitude;
+            document.getElementById('longitude').textContent = longitude;
+            document.getElementById('distance').textContent = haversine_distance(51.898046,latitude,-8.483321,longitude);
+
+            // Send data to the Google Sheets endpoint
+            sendToSheet(latitude, longitude);
+          },
+          function (error) {
+            alert('Error obtaining location: ' + error.message);
+          }
+        );
+      } else {
+        alert("Geolocation is not supported by this browser.");
+      }
+    }
+
+    function hav (x) {
+        return Math.sin(x/2)*Math.sin(x/2);
+    }
+      
+    function haversine_distance (lat1,lat2,lon1,lon2)
+    {
+      x = hav(0.0174533*(lat2-lat1)) + Math.cos(0.0174533*lat1)*Math.cos(0.0174533*lat2)*hav(0.0174533*(lon2-lon1));
+      d = 2*6.3781e+6*Math.asin(Math.sqrt(x))
+      return d;
+    }
+    
+    function sendToSheet(latitude, longitude) {
+      fetch('https://script.google.com/macros/s/AKfycbzMceemf3esbAl7KqpRcnrlc4K0fACTlEIfFescPTG6eqwPgGHhZTVhnYKE4CTHBBcy/exec', {
+        redirect: "follow",
+        method: 'POST',
+        body: JSON.stringify({ latitude, longitude }),
+        headers: {
+        "Content-Type": "text/plain;charset=utf-8",
+      },
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.status === 'success') {
+          alert("Data sent successfully!");
+        } else {
+          alert("Error sending data: " + data.message);
         }
-    </script>
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('Error sending data: ' + error.message);
+      });
+    }
+  </script>
 </body>
 </html>
