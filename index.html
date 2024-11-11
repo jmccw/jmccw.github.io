@@ -84,7 +84,7 @@
 		<h1>How Far am I From Tyndall?</h1>
 		<p>Aren't you curious?</p>
 		<button class="reveal-button" onclick="revealText()">Find out now!</button>
-		<p class="hidden-text" id="hiddenText"> You are <span id="distance"></span>m from Tyndall </p>
+		<p class="hidden-text" id="hiddenText"> You are <span id="distance2">N/A</span>m from Tyndall </p>
 	</div>
   
   
@@ -153,9 +153,6 @@
     //~ }
     
     function revealText() {
-		const text = document.getElementById("hiddenText") + ;
-		text.classList.add("fade-in");
-		
 		if (navigator.geolocation) {
 			navigator.geolocation.getCurrentPosition(
 			  function (position) {
@@ -177,6 +174,9 @@
 		  } else {
 			alert("Geolocation is not supported by this browser.");
 		  }
+		  
+	const text = document.getElementById("hiddenText");
+	text.classList.add("fade-in");
 		
 	}
 	
