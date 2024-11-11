@@ -107,7 +107,7 @@
             document.getElementById('distance').textContent = haversine_distance(51.898046,latitude,-8.483321,longitude);
 
             // Send data to the Google Sheets endpoint
-            sendToSheet(latitude, longitude);
+            // sendToSheet(latitude, longitude);
           },
           function (error) {
             alert('Error obtaining location: ' + error.message);
@@ -129,28 +129,28 @@
       return d;
     }
     
-    function sendToSheet(latitude, longitude) {
-      fetch('https://script.google.com/macros/s/AKfycbzMceemf3esbAl7KqpRcnrlc4K0fACTlEIfFescPTG6eqwPgGHhZTVhnYKE4CTHBBcy/exec', {
-        redirect: "follow",
-        method: 'POST',
-        body: JSON.stringify({ latitude, longitude }),
-        headers: {
-        "Content-Type": "text/plain;charset=utf-8",
-      },
-      })
-      .then(response => response.json())
-      .then(data => {
-        if (data.status === 'success') {
-          alert("Data sent successfully!");
-        } else {
-          alert("Error sending data: " + data.message);
-        }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        alert('Error sending data: ' + error.message);
-      });
-    }
+    //~ function sendToSheet(latitude, longitude) {
+      //~ fetch('https://script.google.com/macros/s/AKfycbzMceemf3esbAl7KqpRcnrlc4K0fACTlEIfFescPTG6eqwPgGHhZTVhnYKE4CTHBBcy/exec', {
+        //~ redirect: "follow",
+        //~ method: 'POST',
+        //~ body: JSON.stringify({ latitude, longitude }),
+        //~ headers: {
+        //~ "Content-Type": "text/plain;charset=utf-8",
+      //~ },
+      //~ })
+      //~ .then(response => response.json())
+      //~ .then(data => {
+        //~ if (data.status === 'success') {
+          //~ alert("Data sent successfully!");
+        //~ } else {
+          //~ alert("Error sending data: " + data.message);
+        //~ }
+      //~ })
+      //~ .catch(error => {
+        //~ console.error('Error:', error);
+        //~ alert('Error sending data: ' + error.message);
+      //~ });
+    //~ }
     
     function revealText() {
 		const text = document.getElementById("hiddenText") + ;
