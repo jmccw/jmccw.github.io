@@ -74,13 +74,15 @@
 <body>
 <!--
   <h2>Geolocation Finder</h2>
+-->
+<!--
   <button onclick="getLocation()">Get Location and Send to Google Sheets</button>
+-->
   <div id="output">
     <p><strong>Latitude:</strong> <span id="latitude">N/A</span></p>
     <p><strong>Longitude:</strong> <span id="longitude">N/A</span></p>
     <p><strong>Distance to Tyndall:</strong> <span id="distance2">N/A</span></p>
   </div>
--->
   
 	<div class="container">
 		<h1>How Far am I From Tyndall?</h1>
@@ -104,12 +106,11 @@
             const longitude = position.coords.longitude;
 
             // Display the latitude and longitude in the UI
-            //document.getElementById('latitude').textContent = latitude;
-            //document.getElementById('longitude').textContent = longitude;
+            document.getElementById('latitude').textContent = latitude;
+            document.getElementById('longitude').textContent = longitude;
             document.getElementById('distance').textContent = haversine_distance(51.898046,latitude,-8.483321,longitude);
 
             // Send data to the Google Sheets endpoint
-            // sendToSheet(latitude, longitude);
           },
           function (error) {
             alert('Error obtaining location: ' + error.message);
