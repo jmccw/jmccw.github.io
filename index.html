@@ -89,6 +89,11 @@
 		<p class="hidden-text" id="hiddenText"> You are <span id="distance">...</span> meters from Tyndall.</p>
 	</div>
   
+  
+  
+  
+  
+
   <script>
 	  
     function getLocation() {
@@ -99,8 +104,8 @@
             const longitude = position.coords.longitude;
 
             // Display the latitude and longitude in the UI
-            document.getElementById('latitude').textContent = latitude;
-            document.getElementById('longitude').textContent = longitude;
+            //document.getElementById('latitude').textContent = latitude;
+            //document.getElementById('longitude').textContent = longitude;
             document.getElementById('distance').textContent = haversine_distance(51.898046,latitude,-8.483321,longitude);
 
             // Send data to the Google Sheets endpoint
