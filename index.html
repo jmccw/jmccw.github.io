@@ -90,7 +90,7 @@
 		<h1>How Far am I From Tyndall?</h1>
 		<p>Aren't you curious?</p>
 		<button class="reveal-button" onclick="revealText()">Find out now!</button>
-		<p class="hidden-text" id="hiddenText"> You are <span id="distance">...</span> meters from Tyndall.</p>
+		<p class="hidden-text" id="hiddenText"> You are <span id="distance"></span> meters from Tyndall.</p>
 	</div>
   
   
@@ -134,29 +134,6 @@
       return d;
     }
     
-    //~ function sendToSheet(latitude, longitude) {
-      //~ fetch('https://script.google.com/macros/s/AKfycbzMceemf3esbAl7KqpRcnrlc4K0fACTlEIfFescPTG6eqwPgGHhZTVhnYKE4CTHBBcy/exec', {
-        //~ redirect: "follow",
-        //~ method: 'POST',
-        //~ body: JSON.stringify({ latitude, longitude }),
-        //~ headers: {
-        //~ "Content-Type": "text/plain;charset=utf-8",
-      //~ },
-      //~ })
-      //~ .then(response => response.json())
-      //~ .then(data => {
-        //~ if (data.status === 'success') {
-          //~ alert("Data sent successfully!");
-        //~ } else {
-          //~ alert("Error sending data: " + data.message);
-        //~ }
-      //~ })
-      //~ .catch(error => {
-        //~ console.error('Error:', error);
-        //~ alert('Error sending data: ' + error.message);
-      //~ });
-    //~ }
-    
     function revealText() {
 		if (navigator.geolocation) {
 			navigator.geolocation.getCurrentPosition(
@@ -164,13 +141,8 @@
 				const latitude = position.coords.latitude;
 				const longitude = position.coords.longitude;
 
-				// Display the latitude and longitude in the UI
-				//~ document.getElementById('latitude').textContent = latitude;
-				//~ document.getElementById('longitude').textContent = longitude;
+				// Update the text
 				document.getElementById('distance').textContent = haversine_distance(51.898046,latitude,-8.483321,longitude);
-
-				// Send data to the Google Sheets endpoint
-				sendToSheet(latitude, longitude);
 			  },
 			  function (error) {
 				alert('Error obtaining location: ' + error.message);
