@@ -3,16 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aesthetic Box Switch</title>
+    <title>How Far?</title>
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
     <style>
+		/* Add Helvetica Neue as the default font for all elements */
+
+
         /* Basic Reset */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Arial', sans-serif;
-        }
+/* Add Helvetica Neue as the default font for all elements */
+* {
+    font-family: 'Roboto', sans-serif;
+}
+
+
 
         /* Centering Body */
         body, html {
@@ -45,7 +50,7 @@
         .hidden {
             opacity: 0;
             transform: translate(-50%, -50%) scale(0.9);
-            pointer-events: none; /* Ignore interactions when hidden */
+            pointer-events: none;
         }
 
         /* Button Styling */
@@ -65,42 +70,32 @@
             background-color: #357abd;
         }
 
-        /* Text Styling */
-        .hidden-text {
-            margin-top: 20px;
-            font-size: 18px;
-            opacity: 0;
-            transition: opacity 1s ease;
-        }
-
-        .fade-in {
-            opacity: 1;
-        }
-
         /* Splash Text Styling */
         #splashText {
             position: absolute;
-            top: 20px;
+            top: 50%;
             left: 50%;
-            transform: translateX(-50%) rotate(-20deg);
-            font-size: 18px;
+            width: 200px;
+            text-align: center;
+            font-size: 13px;
             font-family: 'Press Start 2P', sans-serif;
             color: #ffd700;
             text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.5);
-            animation: bounce 3s ease-in-out infinite alternate;
+            animation: bounce 1s ease-in-out infinite alternate;
             z-index: 10;
+            transition: opacity 1s ease;
         }
 
         /* Keyframe Animation for Bouncing */
         @keyframes bounce {
             0% {
-                transform: translate(-50%, 0) rotate(-20deg);
+                transform: translate(-10px, -10px) rotate(-15deg) scale(1);
             }
             50% {
-                transform: translate(-45%, 15px) rotate(-20deg);
+                transform: translate(-10px, -10px) rotate(-14deg) scale(1.25);
             }
             100% {
-                transform: translate(-50%, 30px) rotate(-20deg);
+                transform: translate(-10px, -10px) rotate(-15deg) scale(1);
             }
         }
     </style>
@@ -112,28 +107,25 @@
     <!-- Original Box -->
     <div class="container" id="originalBox">
         <h1>How Far Am I From Tyndall?</h1>
-        <p>Aren't you curious?</p>
         <button class="reveal-button" onclick="switchToNewBox()">Find out now!</button>
     </div>
 
     <!-- New Box (Initially Hidden) -->
     <div class="container hidden" id="newBox">
-        <p>You are...</p>
-        <h1><span id="distance"></span> meters</h1>
-        <p>from Tyndall National Institute.</p>
-        <button class="new-button" onclick="switchToOriginalBox()">Check again?</button>
+        <p>You are</p>
+        <h1><span id="distance"></span></h1>
+        <p>from the mother land.</p>
+        <button class="new-button" onclick="switchToOriginalBox()">Moved? Check again!</button>
     </div>
 
     <script>
         // Array of splash text messages
         const splashMessages = [
-            "Curious about Tyndall?",
-            "Explore the unknown!",
-            "Discover new things!",
-            "Geolocation magic!",
-            "Just a click away!",
-            "Tech meets curiosity!",
-            "On the way to Tyndall!"
+            "Aren't you curious?",
+            "and Armando is a star",
+            "apologies for the e-noise",
+            "Did you know we have..",
+            "Accurate to the micro-meter!"
         ];
 
         // Randomly select a message and display it
@@ -144,55 +136,80 @@
             revealText();
             const originalBox = document.getElementById("originalBox");
             const newBox = document.getElementById("newBox");
+            const splashText = document.getElementById("splashText");
 
-            // Fade out the original box
+            // Fade out the original box and splash text
             originalBox.classList.add("hidden");
+            splashText.classList.add("hidden");
 
             // After a short delay, fade in the new box
             setTimeout(() => {
                 newBox.classList.remove("hidden");
-            }, 800); // Delay to allow fade-out animation
+            }, 1000);
         }
 
         // Function to switch back to the original box
         function switchToOriginalBox() {
             const originalBox = document.getElementById("originalBox");
             const newBox = document.getElementById("newBox");
+            const splashText = document.getElementById("splashText");
 
             // Fade out the new box
             newBox.classList.add("hidden");
 
-            // After a short delay, fade in the original box
+            // After a short delay, fade in the original box and splash text
             setTimeout(() => {
                 originalBox.classList.remove("hidden");
-            }, 800); // Delay to allow fade-out animation
+                splashText.classList.remove("hidden");
+            }, 1000);
         }
 
-        function hav (x) {
-            return Math.sin(x/2)*Math.sin(x/2);
+        function hav(x) {
+            return Math.sin(x / 2) * Math.sin(x / 2);
         }
 
-        function haversine_distance (lat1,lat2,lon1,lon2) {
-            let x = hav(0.0174533*(lat2-lat1)) + Math.cos(0.0174533*lat1)*Math.cos(0.0174533*lat2)*hav(0.0174533*(lon2-lon1));
-            let d = 2*6.3781e+6*Math.asin(Math.sqrt(x));
+        function haversine_distance(lat1, lat2, lon1, lon2) {
+            let x = hav(0.0174533 * (lat2 - lat1)) + Math.cos(0.0174533 * lat1) * Math.cos(0.0174533 * lat2) * hav(0.0174533 * (lon2 - lon1));
+            let d = 2 * 6.3781e+6 * Math.asin(Math.sqrt(x));
             return d;
         }
 
+        // Function to animate dots
+        function animateDots(elementId) {
+            const element = document.getElementById(elementId);
+            const dots = [ '.', '..', '...'];
+            let dotIndex = 0;
+
+            // Start an interval to update the dots
+            const intervalId = setInterval(() => {
+                element.textContent = `${dots[dotIndex]}`;
+                dotIndex = (dotIndex + 1) % dots.length;
+            }, 500);
+
+            // Return the intervalId to allow stopping the animation
+            return intervalId;
+        }
+
+        // Reveal text and animate dots
         function revealText() {
             if (navigator.geolocation) {
-                document.getElementById('distance').textContent = "Calculating...";
+                // Start dots animation
+                const dotAnimation = animateDots('distance');
+                
                 navigator.geolocation.getCurrentPosition(
                     function (position) {
                         const latitude = position.coords.latitude;
                         const longitude = position.coords.longitude;
                         const distToTyndall = haversine_distance(51.898046, latitude, -8.483321, longitude);
-                        const formattedDistance = distToTyndall > 1000 ? (distToTyndall / 1000).toFixed(2) + ' km' : distToTyndall.toFixed(2) + ' meters';
+                        const formattedDistance = distToTyndall.toFixed(6) + ' meters';
 
-                        // Update the text
+                        // Stop the animation and display distance
+                        clearInterval(dotAnimation);
                         document.getElementById('distance').textContent = formattedDistance;
                     },
                     function (error) {
-                        document.getElementById('distance').textContent = "Unable to access location";
+                        clearInterval(dotAnimation);
+                        document.getElementById('distance').textContent = "an unknown distance";
                     }
                 );
             } else {
