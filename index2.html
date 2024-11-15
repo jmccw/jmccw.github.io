@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>How Far Am I From Tyndall?</title>
+    <title>Aesthetic Box Switch</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
         /* Basic Reset */
         * {
@@ -13,29 +14,42 @@
             font-family: 'Arial', sans-serif;
         }
 
-        /* Centering Content */
+        /* Centering Body */
         body, html {
-            display: flex;
-            align-items: center;
-            justify-content: center;
             height: 100vh;
             background-color: #f2f2f2;
             color: #333;
             overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         /* Container Styling */
         .container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             text-align: center;
             padding: 20px;
-            max-width: 400px;
+            width: 300px;
             background: #ffffff;
             border-radius: 12px;
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            opacity: 1;
+            transition: opacity 1s ease, transform 1s ease;
+        }
+
+        /* Hidden Styling */
+        .hidden {
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.9);
+            pointer-events: none; /* Ignore interactions when hidden */
         }
 
         /* Button Styling */
-        .reveal-button {
+        .reveal-button, .new-button {
             padding: 10px 20px;
             margin-top: 20px;
             background-color: #4a90e2;
@@ -47,7 +61,7 @@
             transition: background-color 0.3s ease;
         }
 
-        .reveal-button:hover {
+        .reveal-button:hover, .new-button:hover {
             background-color: #357abd;
         }
 
@@ -59,25 +73,131 @@
             transition: opacity 1s ease;
         }
 
-        /* Fade-in Animation */
         .fade-in {
             opacity: 1;
         }
+
+        /* Splash Text Styling */
+        #splashText {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%) rotate(-20deg);
+            font-size: 18px;
+            font-family: 'Press Start 2P', sans-serif;
+            color: #ffd700;
+            text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.5);
+            animation: bounce 3s ease-in-out infinite alternate;
+            z-index: 10;
+        }
+
+        /* Keyframe Animation for Bouncing */
+        @keyframes bounce {
+            0% {
+                transform: translate(-50%, 0) rotate(-20deg);
+            }
+            50% {
+                transform: translate(-45%, 15px) rotate(-20deg);
+            }
+            100% {
+                transform: translate(-50%, 30px) rotate(-20deg);
+            }
+        }
     </style>
 </head>
-
 <body>
-    <div class="container">
-        <h1>How Far am I From Tyndall?</h1>
+    <!-- Splash Text -->
+    <div id="splashText">Curious about Tyndall?</div>
+
+    <!-- Original Box -->
+    <div class="container" id="originalBox">
+        <h1>How Far Am I From Tyndall?</h1>
         <p>Aren't you curious?</p>
-        <button class="reveal-button" onclick="revealText()">Find out now!</button>
-        <p class="hidden-text" id="hiddenText">You are {}m from Tyndall</p>
+        <button class="reveal-button" onclick="switchToNewBox()">Find out now!</button>
+    </div>
+
+    <!-- New Box (Initially Hidden) -->
+    <div class="container hidden" id="newBox">
+        <p>You are...</p>
+        <h1><span id="distance"></span> meters</h1>
+        <p>from Tyndall National Institute.</p>
+        <button class="new-button" onclick="switchToOriginalBox()">Check again?</button>
     </div>
 
     <script>
+        // Array of splash text messages
+        const splashMessages = [
+            "Curious about Tyndall?",
+            "Explore the unknown!",
+            "Discover new things!",
+            "Geolocation magic!",
+            "Just a click away!",
+            "Tech meets curiosity!",
+            "On the way to Tyndall!"
+        ];
+
+        // Randomly select a message and display it
+        document.getElementById('splashText').textContent = splashMessages[Math.floor(Math.random() * splashMessages.length)];
+
+        // Function to switch to the new box
+        function switchToNewBox() {
+            revealText();
+            const originalBox = document.getElementById("originalBox");
+            const newBox = document.getElementById("newBox");
+
+            // Fade out the original box
+            originalBox.classList.add("hidden");
+
+            // After a short delay, fade in the new box
+            setTimeout(() => {
+                newBox.classList.remove("hidden");
+            }, 800); // Delay to allow fade-out animation
+        }
+
+        // Function to switch back to the original box
+        function switchToOriginalBox() {
+            const originalBox = document.getElementById("originalBox");
+            const newBox = document.getElementById("newBox");
+
+            // Fade out the new box
+            newBox.classList.add("hidden");
+
+            // After a short delay, fade in the original box
+            setTimeout(() => {
+                originalBox.classList.remove("hidden");
+            }, 800); // Delay to allow fade-out animation
+        }
+
+        function hav (x) {
+            return Math.sin(x/2)*Math.sin(x/2);
+        }
+
+        function haversine_distance (lat1,lat2,lon1,lon2) {
+            let x = hav(0.0174533*(lat2-lat1)) + Math.cos(0.0174533*lat1)*Math.cos(0.0174533*lat2)*hav(0.0174533*(lon2-lon1));
+            let d = 2*6.3781e+6*Math.asin(Math.sqrt(x));
+            return d;
+        }
+
         function revealText() {
-            const text = document.getElementById("hiddenText");
-            text.classList.add("fade-in");
+            if (navigator.geolocation) {
+                document.getElementById('distance').textContent = "Calculating...";
+                navigator.geolocation.getCurrentPosition(
+                    function (position) {
+                        const latitude = position.coords.latitude;
+                        const longitude = position.coords.longitude;
+                        const distToTyndall = haversine_distance(51.898046, latitude, -8.483321, longitude);
+                        const formattedDistance = distToTyndall > 1000 ? (distToTyndall / 1000).toFixed(2) + ' km' : distToTyndall.toFixed(2) + ' meters';
+
+                        // Update the text
+                        document.getElementById('distance').textContent = formattedDistance;
+                    },
+                    function (error) {
+                        document.getElementById('distance').textContent = "Unable to access location";
+                    }
+                );
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
         }
     </script>
 </body>
